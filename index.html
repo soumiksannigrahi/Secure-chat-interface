@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CipherChat • E2E Encrypted</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons for premium UI icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- MQTT.js for global WebSockets Pub/Sub -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-card">
+            <h2>CipherChat Environment</h2>
+            <p>Enter a shared password or paste a room link to join securely. Maximum 10 participants.</p>
+            <div class="input-wrapper login-input-wrapper">
+                <i class="ph ph-lock-key"></i>
+                <input type="password" id="room-password" placeholder="Enter room password..." autocomplete="off">
+            </div>
+            <button id="join-btn" class="join-btn">
+                <span>Join Secure Room</span>
+                <i class="ph ph-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="background-animation">
+        <!-- Replaced colored orbs with a sleek monochrome mesh look via CSS -->
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>CipherChat</h2>
+                <span class="badge"><i class="ph ph-shield-check"></i> E2E</span>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar my-avatar"></div>
+                <div class="user-details">
+                    <span class="user-name">You (Tab <span id="tab-id-display"></span>)</span>
+                    <span class="user-status text-online">Online</span>
+                </div>
+            </div>
+
+            <div class="participants-module">
+                <h3 id="participant-count-header">Participants (1/10)</h3>
+                <ul class="participants-list" id="participants-list">
+                    <!-- My Avatar is always here -->
+                    <li class="participant-item">
+                        <div class="p-avatar my-avatar"></div>
+                        <span>You</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="crypto-debug">
+                <h3>Encryption Details</h3>
+                <div class="debug-item">
+                    <span>Crypto Method:</span>
+                    <code>PBKDF2 + AES-GCM</code>
+                </div>
+                <div class="debug-item">
+                    <span>Room ID (hashed):</span>
+                    <code id="room-id-display">Waiting...</code>
+                </div>
+                <div class="debug-item">
+                    <span>Broker Connection:</span>
+                    <code id="broker-status">Disconnected</code>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <div class="chat-peer">
+                    <div class="peer-details">
+                        <span class="peer-name">Secure Environment</span>
+                        <span class="peer-status" id="header-peer-status">Waiting for others...</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="icon-btn highlight-btn" id="share-link-btn" title="Share Room Link">
+                        <i class="ph ph-share-network"></i> Copy Link
+                    </button>
+                    <button class="icon-btn" title="Environment Info"><i class="ph ph-info"></i></button>
+                </div>
+            </header>
+
+            <div class="messages-container" id="messages-container">
+                <div class="encryption-notice">
+                    <i class="ph ph-lock-key"></i>
+                    <p>Messages are end-to-end encrypted. No one outside of this chat, not even CipherChat, can read them.</p>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <button class="icon-btn attach-btn"><i class="ph ph-paperclip"></i></button>
+                <div class="input-wrapper">
+                    <input type="text" id="message-input" placeholder="Type an encrypted message..." autocomplete="off" disabled>
+                </div>
+                <button class="send-btn" id="send-btn" disabled>
+                    <i class="ph ph-paper-plane-right"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- Toast Notification Area -->
+        <div class="toast-container" id="toast-container"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
